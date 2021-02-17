@@ -1,1 +1,18 @@
-index
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title%}{% endblock %}</title>
+        <div class="nav">
+            
+                <a href="{% url 'cadastro' %}">Cadastrar</a>
+
+                <a href="{% url 'consulta' %}">Consultar</a>
+                
+        </div>
+    </head>
+    <body>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>
