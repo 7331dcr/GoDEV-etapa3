@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block body %}
+    Fulaninho cadastrado com sucesso.
+    <br>
     <div id=consulta>
-        
+        {% for entry in entries %}
+            {{entry}}
+        {% endfor %}
     </div>
 {% endblock %}

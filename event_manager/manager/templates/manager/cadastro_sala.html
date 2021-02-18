@@ -1,20 +1,20 @@
 {% extends "manager/index.html" %}
 
 {% block title %}
-    Cadastro
+    Cadastro sala
 {% endblock %}
 
 {% block body %}
-    <a href="{% url 'cadastro_sala' %}">CADASTRAR SALA PARA EVENTO</a><br>
+    <a href="{% url 'cadastro' %}">CADASTRAR PARTICIPANTE</a><br>
     <a href="{% url 'cadastro_cafe' %}">CADASTRAR ESPAÇO PARA CAFÉ</a><br>
 
     <br>
-    Cadastro de participante:
-    <div id=cadastro>
+    Cadastro de sala para evento:
+    <div id=cadastro_sala>
         <form>
             <input type="text" name="nome" placeholder="Nome">
             
-            <input type="text" name="sobrenome" placeholder="Sobrenome">
+            <input type="number" name="quantidade" placeholder="Lotação máxima">
 
             <input type="submit" value="Cadastrar">
         </form>
