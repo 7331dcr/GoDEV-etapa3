@@ -15,4 +15,5 @@ class Attendee(models.Model):
     name = models.TextField(blank=False)
     last_name = models.TextField(blank=False)
     event_room = models.ForeignKey("Event_room", null=True, blank=True, on_delete=models.SET_NULL)
+    coffee_space = models.ForeignKey("Coffee_space", null=True, blank=True, on_delete=models.SET_NULL)
     timestamp = models.DateTimeField(auto_now_add=True)
