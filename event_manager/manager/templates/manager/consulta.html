@@ -1,15 +1,34 @@
 {% extends "manager/index.html" %}
 
 {% block title %}
-    Consulta
+    Consulta participantes
 {% endblock %}
 
 {% block body %}
-    Fulaninho cadastrado com sucesso.
-    <br>
+    <a href="{% url 'consulta_sala' %}">CONSULTAR POR SALA</a><br><br>
+    <a href="{% url 'consulta_cafe' %}">CONSULTAR POR ESPAÇO</a>
+    <hr>
+
+    {% if attendee %}
+        {{attendee.name}} {{attendee.last_name}} {{attendee.event_room.name}}
+    {% else %}
+        <h3>Consulta de participante:</h3>
+        <div id=consulta>
+            <form action="{% url 'consulta' %}" method="post">
+                <input type="text" name="name" placeholder="Nome">
+                
+                <input type="text" name="last_name" placeholder="Sobrenome">
+
+                <input type="submit" value="Consultar">
+            </form>
+        </div>
+    {% endif %}
+
+    (temporário):
     <div id=consulta>
-        {% for entry in entries %}
-            {{entry}}
+        {% for attendee in attendees %}
+            {{attendee}}<br>
         {% endfor %}
     </div>
+
 {% endblock %}

@@ -15,5 +15,9 @@
     <body>
         {% block body %}
         {% endblock %}
+
+        {% for row in rows %}
+            {{row}}
+        {% endfor %}
     </body>
 </html>
