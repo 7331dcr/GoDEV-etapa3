@@ -2,22 +2,26 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+            .nav_index {
+                font-size: 24px;
+            }
+            table, td, th {
+                border: 1px solid black;
+                text-align: left;
+                border-collapse: collapse;
+                padding: 3px;
+            }
+        </style>
         <title>{% block title%}{% endblock %}</title>
-        <div class="nav">
-            
-                <a href="{% url 'cadastro' %}">Cadastrar</a>
-
-                <a href="{% url 'consulta' %}">Consultar</a>
-
+        <div class="nav_index">
+                <a href="{% url 'cadastro' %}">CADASTRAR</a> | 
+                <a href="{% url 'consulta' %}">CONSULTAR</a>
         </div>
         <hr>
     </head>
     <body>
         {% block body %}
         {% endblock %}
-
-        {% for row in rows %}
-            {{row}}
-        {% endfor %}
     </body>
 </html>

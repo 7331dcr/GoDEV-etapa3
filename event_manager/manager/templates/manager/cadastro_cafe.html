@@ -6,14 +6,14 @@
 
 {% block body %}
     <a href="{% url 'cadastro' %}">CADASTRAR PARTICIPANTE</a><br><br>
-    <a href="{% url 'pre_cadastro_sala' %}">CADASTRAR SALA PARA EVENTO</a>
+    <a href="{% url 'pre_cadastro_sala' %}">CADASTRAR SALA PARA EVENTOS</a>
     <hr>
 
     {% if message %}
         <div class="alert-message">
             {{message}}
-            <br><br>
         </div>
+        <br>
     {% endif %}
 
     {% if spaces %}
@@ -26,20 +26,19 @@
         </div>
     {% else %}
     <h3>Cadastro de espaços para café:</h3>
-    <div id=cadastro_cafe>
-        <form action="{% url 'cadastro_cafe' %}" method="post">
-            
-            <label for="name1">ESPAÇO 1:</label>
-            <input type="text" name="name1" placeholder="Nome">
-            <input type="number" name="capacity1" placeholder="Lotação máxima"><br><br>
+        <div id=cadastro_cafe>
+            <form action="{% url 'cadastro_cafe' %}" method="post">
+                
+                <label for="name1">ESPAÇO 1:</label>
+                <input type="text" name="name1" placeholder="Nome">
+                <input type="number" name="capacity1" placeholder="Lotação máxima"><br><br>
 
-            <label for="name2">ESPAÇO 2:</label>
-            <input type="text" name="name2" placeholder="Nome">
-            <input type="number" name="capacity2" placeholder="Lotação máxima"><br><br>
+                <label for="name2">ESPAÇO 2:</label>
+                <input type="text" name="name2" placeholder="Nome">
+                <input type="number" name="capacity2" placeholder="Lotação máxima"><br><br>
 
-            <input type="submit" value="Cadastrar">
-        </form>
-    </div>
+                <input type="submit" value="Cadastrar">
+            </form>
+        </div>
     {% endif %}
-
 {% endblock %}

@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block body %}
-    <a href="{% url 'pre_cadastro_sala' %}">CADASTRAR SALA PARA EVENTO</a><br><br>
+    <a href="{% url 'pre_cadastro_sala' %}">CADASTRAR SALA PARA EVENTOS</a><br><br>
     <a href="{% url 'cadastro_cafe' %}">CADASTRAR ESPAÇO PARA CAFÉ</a>
     <hr>
+    
     {% if message %}
         <div class="alert-message">
             {{message}} <a href="{% url 'cadastro' %}">FECHAR</a>
@@ -19,10 +20,9 @@
     <div id=cadastro>
         <form action="{% url 'cadastro' %}" method="post">
             <input type="text" name="name" placeholder="Nome">
-            
             <input type="text" name="last_name" placeholder="Sobrenome">
-
             <input type="submit" value="Cadastrar">
         </form>
     </div>
+    
 {% endblock %}

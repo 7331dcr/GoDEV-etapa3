@@ -18,18 +18,17 @@
             {% endfor %}
         </div>
     {% else %}
-    <h3>Cadastro de sala(s) para evento:</h3>
-    <div id=cadastro_sala>
-        <form action="{% url 'cadastro_sala' %}" method="post">
-            {% for number in number_list %}
-                <input type="text" name="name{{number}}" placeholder="Nome">
-                <input type="number" name="capacity{{number}}" placeholder="Lotação máxima">
-                <br><br>
-            {% endfor %}
-            <input type="hidden" name="quantity" value="{{quantity}}">
-            <input type="submit" value="Cadastrar">
-        </form>
-    </div>
+        <h3>Cadastro de sala(s) para evento:</h3>
+        <div id=cadastro_sala>
+            <form action="{% url 'cadastro_sala' %}" method="post">
+                {% for number in number_list %}
+                    <input type="text" name="name{{number}}" placeholder="Nome">
+                    <input type="number" name="capacity{{number}}" placeholder="Lotação máxima">
+                    <br><br>
+                {% endfor %}
+                <input type="hidden" name="quantity" value="{{quantity}}">
+                <input type="submit" value="Cadastrar">
+            </form>
+        </div>
     {% endif %}
-
 {% endblock %}

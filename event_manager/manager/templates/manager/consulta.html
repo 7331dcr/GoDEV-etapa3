@@ -9,10 +9,7 @@
     <a href="{% url 'consulta_cafe' %}">CONSULTAR POR ESPAÇO</a>
     <hr>
 
-    {% if attendee %}
-        {{attendee.name}} {{attendee.last_name}} {{attendee.event_room.name}}
-    {% else %}
-        <h3>Consulta de participante:</h3>
+    <h3>Consulta de participante:</h3>
         <div id=consulta>
             <form action="{% url 'consulta' %}" method="post">
                 <input type="text" name="name" placeholder="Nome">
@@ -22,13 +19,29 @@
                 <input type="submit" value="Consultar">
             </form>
         </div>
-    {% endif %}
-
-    (temporário):
+        
+    {% if attendees %}
+    <br><br>
     <div id=consulta>
+        <table>
+            <tr>
+                <th>Nº</th>
+                <th>NOME</th>
+                <th>SOBRENOME</th>
+                <th>ESPAÇO DO CAFÉ</th>
+                <th>SALA DE EVENTO</th>
+            </tr>
         {% for attendee in attendees %}
-            {{attendee}}<br>
+            <tr>
+                <td>{{attendee.id}}</td>
+                <td>{{attendee.name}}</td>
+                <td>{{attendee.last_name}}</td>
+                <td>{{attendee.coffee_space.name}}</td>
+                <td>{{attendee.event_room.name}}</td>
+            </tr>
         {% endfor %}
+        </table>
     </div>
+    {% endif %}
 
 {% endblock %}

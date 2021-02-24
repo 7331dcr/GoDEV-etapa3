@@ -9,17 +9,16 @@
     {% if message %}
         <div class="alert-message">
             {{message}}
-            <br>
         </div>
+        <br>
     {% endif %}
-
+        
     <div id=pre_cadastro_sala>
         <form action="{% url 'cadastro_sala' %}">
             <h3><label for="quantity">Especifique a quantidade de salas para cadastro:</label></h3>
-            
             <input type="number" name="quantity">
-
             <input type="submit" value="Cadastrar salas">
         </form>
+    </div>
 
 {% endblock %}
