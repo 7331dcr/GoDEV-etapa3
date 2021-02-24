@@ -7,35 +7,58 @@ from .models import Event_room, Coffee_space, Attendee
 
 
 def index(request):
-    quantidade = 6
-    rows = []
-    for quantia in range(quantidade):
-        rows.append(quantia)
-    
-    print(rows)
-    return render(request, "manager/index.html", {
-        "rows": rows
-    })
+    return render(request, "manager/index.html")
 
 def cadastro(request):
     if len(Event_room.objects.all()) < 1:
         return HttpResponseRedirect(reverse("pre_cadastro_sala"))
     
-    if len(Coffee_space.objects.all()) < 1:
+    if len(Coffee_space.objects.all()) < 2:
         return HttpResponseRedirect(reverse("cadastro_cafe"))
 
 
     if request.method == "POST":
         name = request.POST['name']
         last_name = request.POST['last_name']
-        
         if not name or not last_name:
             return render(request, "manager/cadastro.html", {
                 "message": f'Cadastro não efetuado. NOME ou SOBRENOME inválidos.'
             })
+        
+        # capacidade maxima de participantes:
+        query_smallest_room = Event_room.objects.all().order_by('capacity').first()
+        smallest_room_capacity = int(query_smallest_room.capacity)
+        number_of_rooms = Event_room.objects.all().count()
+        max_attendees = smallest_room_capacity * number_of_rooms + (number_of_rooms - 1)
+        print(max_attendees)
 
-        new_entry = Attendee(name=name, last_name=last_name)
-        new_entry.save()
+        # quantidade de participantes já cadastrados
+        attendees_qnt = Attendee.objects.all().count()
+        print(attendees_qnt)
+
+        if max_attendees > attendees_qnt:
+            
+            print('ok')
+            # encontra a sala com menor quantidade de prticipantes
+            rooms = Event_room.objects.all()
+            emptier_room = None
+            index = 0
+            for i in range(len(rooms)):
+                if rooms[i].room_assigneds.count() < rooms[index].room_assigneds.count():
+                    index = i
+                emptier_room = rooms[index]
+            print(emptier_room)
+
+            # designa espaço para café
+            assigned_space = Coffee_space.objects.all()
+            if attendees_qnt % 2 != 0:
+                assigned_space = assigned_space.first()
+            else:
+                assigned_space = assigned_space.last()
+
+            new_entry = Attendee(name=name, last_name=last_name, event_room=emptier_room, coffee_space=assigned_space)
+            new_entry.save()
+            print(new_entry)
 
         return render(request, "manager/cadastro.html", {
             "message": f'Participante "{name} {last_name}" foi cadastrado com sucesso.'
@@ -124,9 +147,11 @@ def cadastro_cafe(request):
 
 def consulta(request):
     attendees = Attendee.objects.all()
-    attendees_list = []
-    for attendee in range(len(attendees)):
-        attendees_list.append(f'"{attendees[attendee].name}{attendees[attendee].last_name}"')
+    
+    # # temporario
+    # attendees_list = []
+    # for attendee in range(len(attendees)):
+    #     attendees_list.append(f'"{attendees[attendee].name}{attendees[attendee].last_name}"')
     
     if request.method == "POST":
         name = request.POST['name']
@@ -137,14 +162,14 @@ def consulta(request):
                 "message": f'NOME ou SOBRENOME inválidos.'
             })
 
-        query = Attendee.objects.get(name=name, last_name=last_name)
-        print(query)
+        query = Attendee.objects.filter(name=name, last_name=last_name)
+
         return render(request, "manager/consulta.html", {
-            "attendee": query
+            "attendees": query
         })
     
     return render(request, "manager/consulta.html", {
-        "attendees": attendees_list
+        # "attendees": attendees_list
     })
 
 def consulta_sala(request):
