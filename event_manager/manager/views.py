@@ -1,12 +1,13 @@
 from django.http import HttpResponseRedirect
-from django.template import Context, Template
 from django.shortcuts import render
 from django.urls import reverse
-from .models import Event_room, Coffee_space, Attendee
 
+from .models import Event_room, Coffee_space, Attendee
+from .util import count_max_attendees, define_coffee_space, find_emptier_room
 
 
 def index(request):
+    
     return render(request, "manager/index.html")
 
 def cadastro(request):
@@ -16,49 +17,25 @@ def cadastro(request):
     if len(Coffee_space.objects.all()) < 2:
         return HttpResponseRedirect(reverse("cadastro_cafe"))
 
-
     if request.method == "POST":
         name = request.POST['name']
         last_name = request.POST['last_name']
+        
         if not name or not last_name:
             return render(request, "manager/cadastro.html", {
                 "message": f'Cadastro não efetuado. NOME ou SOBRENOME inválidos.'
             })
-        
-        # capacidade maxima de participantes:
-        query_smallest_room = Event_room.objects.all().order_by('capacity').first()
-        smallest_room_capacity = int(query_smallest_room.capacity)
-        number_of_rooms = Event_room.objects.all().count()
-        max_attendees = smallest_room_capacity * number_of_rooms + (number_of_rooms - 1)
-        print(max_attendees)
 
-        # quantidade de participantes já cadastrados
-        attendees_qnt = Attendee.objects.all().count()
-        print(attendees_qnt)
+        current_attendees = Attendee.objects.all().count()
 
-        if max_attendees > attendees_qnt:
-            
-            print('ok')
-            # encontra a sala com menor quantidade de prticipantes
-            rooms = Event_room.objects.all()
-            emptier_room = None
-            index = 0
-            for i in range(len(rooms)):
-                if rooms[i].room_assigneds.count() < rooms[index].room_assigneds.count():
-                    index = i
-                emptier_room = rooms[index]
-            print(emptier_room)
+        if count_max_attendees() > current_attendees:
+           
+            emptier_room = find_emptier_room()
 
-            # designa espaço para café
-            assigned_space = Coffee_space.objects.all()
-            if attendees_qnt % 2 != 0:
-                assigned_space = assigned_space.first()
-            else:
-                assigned_space = assigned_space.last()
+            assigned_space = define_coffee_space()
 
             new_entry = Attendee(name=name, last_name=last_name, event_room=emptier_room, coffee_space=assigned_space)
             new_entry.save()
-            print(new_entry)
 
         return render(request, "manager/cadastro.html", {
             "message": f'Participante "{name} {last_name}" foi cadastrado com sucesso.'
@@ -69,44 +46,52 @@ def cadastro(request):
 def pre_cadastro_sala(request):
     if len(Event_room.objects.all()) > 0:
         return HttpResponseRedirect(reverse("cadastro_sala"))
-        
-    if request.method == "POST":
 
-        pass
     return render(request, "manager/pre_cadastro_sala.html")
 
 def cadastro_sala(request):
-    # Show's only current event rooms if they were already created
-    rooms = Event_room.objects.all()
-    if len(rooms) > 0:
-        rooms_list = []
-        for room in range(len(rooms)):
-            rooms_list.append(f'Sala "{rooms[room].name}". Capacidade: {rooms[room].capacity}')
-        return render(request, "manager/cadastro_sala.html", {
-            "rooms": rooms_list
-        })
-    
-    # Handles number of event room forms
     forms_quantity = 0
     number_list = []
-    if request.method == "GET":
-        forms_quantity = int(request.GET.get('quantity', ''))
-        for i in range(forms_quantity):
-            number_list.append(i)
-
+    
     if request.method == "POST":
         rooms_quantity = int(request.POST['quantity'])
         for i in range(rooms_quantity):
             name = request.POST[f'name{i}']
             capacity = request.POST[f'capacity{i}']
             if not name or not capacity:
-                # Returns error message
+                abort_entries = Event_room.objects.all().delete()
+                abort_entries.save()
                 return render(request, "manager/pre_cadastro_sala.html", {
                     "message": f'Cadastro não efetuado. NOME ou LOTAÇÃO MÁXIMA inválidos.',
                 })
             new_entry = Event_room(name=name, capacity=capacity)
             new_entry.save()
         return HttpResponseRedirect(reverse("cadastro"))
+
+    if request.method == "GET":
+        rooms = Event_room.objects.all()
+        if len(rooms) > 0:
+            rooms_list = []
+            for room in range(len(rooms)):
+                rooms_list.append(f'Sala "{rooms[room].name}". Capacidade: {rooms[room].capacity}')
+            return render(request, "manager/cadastro_sala.html", {
+                "rooms": rooms_list
+            })
+        
+        try:
+            forms_quantity = int(request.GET.get('quantity', ''))
+        except ValueError:
+            return render(request, "manager/pre_cadastro_sala.html", {
+            "message": "Número de salas inválido."
+            })
+        
+        if forms_quantity < 1:
+            return render(request, "manager/pre_cadastro_sala.html", {
+            "message": "Número de salas deve ser um maior que 0."
+            })
+       
+        for i in range(forms_quantity):
+            number_list.append(i)
 
     return render(request, "manager/cadastro_sala.html", {
         "number_list": number_list,
@@ -115,10 +100,12 @@ def cadastro_sala(request):
 
 def cadastro_cafe(request):
     spaces = Coffee_space.objects.all()
+    
     if len(spaces) > 0:
         spaces_list = []
         for space in range(len(spaces)):
             spaces_list.append(f'Espaço "{spaces[space].name}". Capacidade: {spaces[space].capacity}')
+        
         return render(request, "manager/cadastro_cafe.html", {
             "spaces": spaces_list
         })
@@ -146,13 +133,6 @@ def cadastro_cafe(request):
 
 
 def consulta(request):
-    attendees = Attendee.objects.all()
-    
-    # # temporario
-    # attendees_list = []
-    # for attendee in range(len(attendees)):
-    #     attendees_list.append(f'"{attendees[attendee].name}{attendees[attendee].last_name}"')
-    
     if request.method == "POST":
         name = request.POST['name']
         last_name = request.POST['last_name']
@@ -168,9 +148,7 @@ def consulta(request):
             "attendees": query
         })
     
-    return render(request, "manager/consulta.html", {
-        # "attendees": attendees_list
-    })
+    return render(request, "manager/consulta.html")
 
 def consulta_sala(request):
     rooms = Event_room.objects.all()
@@ -187,7 +165,7 @@ def consulta_sala(request):
             })
         
         query = Attendee.objects.filter(event_room=Event_room.objects.get(name=name))
-        print(query)
+
         return render(request, "manager/consulta_sala.html", {
             "attendees": query,
             "room_name": name
@@ -206,13 +184,13 @@ def consulta_cafe(request):
     if request.method == "POST":
         name = request.POST['name']
         
-    #     if not name or not last_name:
-    #         return render(request, "manager/cadastro.html", {
-    #             "message": f'NOME ou SOBRENOME inválidos.'
-    #         })
+        if not name or not last_name:
+            return render(request, "manager/cadastro.html", {
+                "message": f'NOME ou SOBRENOME inválidos.'
+            })
 
         query = Attendee.objects.filter(coffee_space=Coffee_space.objects.get(name=name))
-        print(query)
+
         return render(request, "manager/consulta_cafe.html", {
             "attendees": query,
             "room_name": name
