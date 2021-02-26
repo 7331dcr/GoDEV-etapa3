@@ -9,26 +9,41 @@
     <a href="{% url 'consulta_sala' %}">CONSULTAR POR SALA</a>
     <hr>
 
+    <h3>Consultar participantes por espaços para café:</h3>
+    <div id=consulta_cafe>
+        <form action="{% url 'consulta_cafe' %}" method="post">
+            <select name=name>
+                {% for space in spaces %}
+                <option value="{{space.name}}">{{space.name}}</option>
+                {% endfor %}
+            </select>
+
+            <input type="submit" value="Consultar participantes">
+        </form>
+    </div>
+   
+    {% if message %}
+    <br><br>
+        {{message}}
+    {% endif %}
+
     {% if attendees %}
         <h2>ESPAÇO: {{space_name}}</h2>
-        <ul>
+        <div id=consulta>
+            <table>
+                <tr>
+                    <th>Nº</th>
+                    <th>NOME</th>
+                    <th>SOBRENOME</th>
+                </tr>
             {% for attendee in attendees %}
-                <li>{{attendee.name}} {{attendee.last_name}}</li> <br>
+                <tr>
+                    <td>{{attendee.id}}</td>
+                    <td>{{attendee.name}}</td>
+                    <td>{{attendee.last_name}}</td>
+                </tr>
             {% endfor %}
-        <ul>
-    {% else %}
-        <h3>Consultar participantes por espaços para café:</h3>
-        <div id=consulta_cafe>
-            <form action="{% url 'consulta_cafe' %}" method="post">
-                <select name=name>
-                    {% for space in spaces %}
-                    <option value="{{space.name}}">{{space.name}}</option>
-                    {% endfor %}
-                </select>
-                <br><br>
-                <input type="submit" value="Consultar participantes">
-
-            </form>
+            </table>
         </div>
     {% endif %}
     

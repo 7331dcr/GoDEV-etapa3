@@ -10,15 +10,15 @@
     <hr>
 
     <h3>Consulta de participante:</h3>
-        <div id=consulta>
-            <form action="{% url 'consulta' %}" method="post">
-                <input type="text" name="name" placeholder="Nome">
-                
-                <input type="text" name="last_name" placeholder="Sobrenome">
+    <div id=consulta>
+        <form action="{% url 'consulta' %}" method="post">
+            <input type="text" name="name" placeholder="Nome">
+            
+            <input type="text" name="last_name" placeholder="Sobrenome">
 
-                <input type="submit" value="Consultar">
-            </form>
-        </div>
+            <input type="submit" value="Consultar">
+        </form>
+    </div>
         
     {% if attendees %}
     <br><br>

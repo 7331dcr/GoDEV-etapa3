@@ -126,7 +126,7 @@ def cadastro_cafe(request):
         new_entry2 = Coffee_space(name=name2, capacity=capacity2)
         new_entry1.save()
         new_entry2.save()
-        
+
         return HttpResponseRedirect(reverse("cadastro"))
 
     return render(request, "manager/cadastro_cafe.html")
@@ -159,21 +159,26 @@ def consulta_sala(request):
     if request.method == "POST":
         name = request.POST['name']
         
-        if not name or not last_name:
-            return render(request, "manager/cadastro.html", {
-                "message": f'NOME ou SOBRENOME inválidos.'
-            })
-        
         query = Attendee.objects.filter(event_room=Event_room.objects.get(name=name))
+
+        if query.count() < 1:
+            return render(request, "manager/consulta_sala.html", {
+            "message": "Não há participantes cadastrados nesta sala.",
+            "room_name": name,
+            "rooms": rooms_list
+        })
 
         return render(request, "manager/consulta_sala.html", {
             "attendees": query,
-            "room_name": name
+            "room_name": name,
+            "rooms": rooms_list
         })
     
     return render(request, "manager/consulta_sala.html", {
         "rooms": rooms_list
     })
+
+
 
 def consulta_cafe(request):
     spaces = Coffee_space.objects.all()
@@ -183,19 +188,23 @@ def consulta_cafe(request):
 
     if request.method == "POST":
         name = request.POST['name']
-        
-        if not name or not last_name:
-            return render(request, "manager/cadastro.html", {
-                "message": f'NOME ou SOBRENOME inválidos.'
-            })
 
         query = Attendee.objects.filter(coffee_space=Coffee_space.objects.get(name=name))
 
+        if query.count() < 1:
+            return render(request, "manager/consulta_sala.html", {
+            "message": "Não há participantes cadastrados neste espaço.",
+            "room_name": name,
+            "rooms": rooms_list
+            })
+
         return render(request, "manager/consulta_cafe.html", {
             "attendees": query,
-            "room_name": name
+            "room_name": name,
+            "spaces": spaces_list
         })
     
     return render(request, "manager/consulta_cafe.html", {
         "spaces": spaces_list
     })
+
