@@ -21,7 +21,8 @@ class Coffee_space(models.Model):
 class Attendee(models.Model):
     name = models.TextField(blank=False)
     last_name = models.TextField(blank=False)
-    event_room = models.ForeignKey("Event_room", null=True, blank=True, on_delete=models.SET_NULL, related_name='room_assigneds')
+    event_room_1 = models.ForeignKey("Event_room", null=True, blank=True, on_delete=models.SET_NULL, related_name='room1_assigneds')
+    event_room_2 = models.ForeignKey("Event_room", null=True, blank=True, on_delete=models.SET_NULL, related_name='room2_assigneds')
     coffee_space = models.ForeignKey("Coffee_space", null=True, blank=True, on_delete=models.SET_NULL, related_name='space_assigneds')
     timestamp = models.DateTimeField(auto_now_add=True)
 
