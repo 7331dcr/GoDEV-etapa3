@@ -14,10 +14,21 @@ def find_emptier_room():
     emptier_room = None
     index = 0
     for i in range(len(rooms)):
-        if rooms[i].room_assigneds.count() < rooms[index].room_assigneds.count():
+        if rooms[i].room1_assigneds.count() < rooms[index].room1_assigneds.count():
             index = i
         emptier_room = rooms[index]
 
+    return emptier_room
+
+
+def find_second_room(available_rooms):
+    emptier_room = None
+    index = 0
+    for i in range(len(available_rooms)):
+        if available_rooms[i].room2_assigneds.count() < available_rooms[index].room2_assigneds.count():
+            index = i
+        emptier_room = available_rooms[index]
+    
     return emptier_room
 
 
@@ -29,3 +40,15 @@ def define_coffee_space(current_attendees):
         assigned_space = assigned_space.last()
 
     return assinged_space
+
+
+def define_room_etapa2():
+    current_attendees = Attendee.objects.all().count()
+    if current_attendees % 2 != 0:
+        emptier_room = find_emptier_room()
+    else:
+        emptier_room = find_emptier_room()
+        available_rooms = Event_room.objects.exclude(name=emptier_room.name)
+        emptier_room = find_second_room(available_rooms)
+
+    return emptier_room
