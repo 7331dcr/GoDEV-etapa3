@@ -21,7 +21,7 @@ def find_emptier_room():
     return emptier_room
 
 
-def define_coffee_space():
+def define_coffee_space(current_attendees):
     assigned_space = Coffee_space.objects.all()
     if current_attendees % 2 != 0:
         assigned_space = assigned_space.first()

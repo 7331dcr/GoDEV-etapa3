@@ -32,7 +32,7 @@ def cadastro(request):
            
             emptier_room = find_emptier_room()
 
-            assigned_space = define_coffee_space()
+            assigned_space = define_coffee_space(current_attendees)
 
             new_entry = Attendee(name=name, last_name=last_name, event_room=emptier_room, coffee_space=assigned_space)
             new_entry.save()
