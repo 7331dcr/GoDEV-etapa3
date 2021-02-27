@@ -27,4 +27,4 @@ class Attendee(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'id:{self.id} name:{self.name} last_name:{self.last_name} event_room:{self.event_room} coffee_space:{self.coffee_space} timestamp:{self.timestamp.strftime("%A, %d. %B %d/%m/%Y %I:%M %p")}'
+        return f'id:{self.id} name:{self.name} last_name:{self.last_name} event_room_1:{self.event_room_1} event_room_2:{self.event_room_1} coffee_space:{self.coffee_space} timestamp:{self.timestamp.strftime("%A, %d. %B %d/%m/%Y %I:%M %p")}'
