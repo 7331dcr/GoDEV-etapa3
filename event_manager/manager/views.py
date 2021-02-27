@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import Event_room, Coffee_space, Attendee
-from .util import count_max_attendees, define_coffee_space, find_emptier_room
+from .util import count_max_attendees, define_coffee_space, define_room_etapa2, find_emptier_room, find_second_room
 
 
 def index(request):
@@ -30,11 +30,13 @@ def cadastro(request):
 
         if count_max_attendees() > current_attendees:
            
-            emptier_room = find_emptier_room()
+            event_room_1 = find_emptier_room()
+
+            event_room_2 = define_room_etapa2()
 
             assigned_space = define_coffee_space(current_attendees)
 
-            new_entry = Attendee(name=name, last_name=last_name, event_room=emptier_room, coffee_space=assigned_space)
+            new_entry = Attendee(name=name, last_name=last_name, event_room_1=event_room_1, event_room_2=event_room_2, coffee_space=assigned_space)
             new_entry.save()
 
         return render(request, "manager/cadastro.html", {
@@ -159,9 +161,11 @@ def consulta_sala(request):
     if request.method == "POST":
         name = request.POST['name']
         
-        query = Attendee.objects.filter(event_room=Event_room.objects.get(name=name))
+        attendees_room_1 = Attendee.objects.filter(event_room_1=Event_room.objects.get(name=name))
+        attendees_room_2 = Attendee.objects.filter(event_room_2=Event_room.objects.get(name=name))
+        room = Event_room.objects.get(name=name)
 
-        if query.count() < 1:
+        if (attendees_room_1.count() + attendees_room_2.count()) < 1:
             return render(request, "manager/consulta_sala.html", {
             "message": "Não há participantes cadastrados nesta sala.",
             "room_name": name,
@@ -169,9 +173,13 @@ def consulta_sala(request):
         })
 
         return render(request, "manager/consulta_sala.html", {
-            "attendees": query,
+            "attendees_1": attendees_room_1,
+            "attendees_2": attendees_room_2,
             "room_name": name,
-            "rooms": rooms_list
+            "rooms": rooms_list,
+            "capacity": room.capacity,
+            "occupancy_1": attendees_room_1.count(),
+            "occupancy_2": attendees_room_2.count()
         })
     
     return render(request, "manager/consulta_sala.html", {
