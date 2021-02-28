@@ -3,10 +3,16 @@ from .models import Event_room, Coffee_space, Attendee
 
 
 def count_max_attendees():
+    rooms = Event_room.objects.all().order_by('capacity')
     smallest_room = Event_room.objects.all().order_by('capacity').first()
+    largest_room = Event_room.objects.all().order_by('capacity').last()
+    additional_attendees = 0
+    for room in rooms:
+        if room.capacity > smallest_room.capacity and room.capacity < largest_room:
+            additional_attendees = additional_attendees + 1
     smallest_room_capacity = int(smallest_room.capacity)
-    number_of_rooms = Event_room.objects.all().count()
-    max_attendees = smallest_room_capacity * number_of_rooms + (number_of_rooms - 1)
+    number_of_rooms = rooms.count()
+    max_attendees = smallest_room_capacity * number_of_rooms + additional_attendees
     
     return max_attendees
 
@@ -65,5 +71,12 @@ def define_room_2():
         emptier_room = find_emptier_room()
         available_rooms = Event_room.objects.exclude(name=emptier_room.name)
         defined_room = find_second_room(available_rooms)
+        if not defined_room.capacity > defined_room.room2_assigneds.count():
+            defined_room = find_second_room(Event_room.objects.all())
+        if not emptier_room.room1_assigneds.count() < int(emptier_room.capacity):
+            defined_room = find_second_room(Event_room.objects.all())
 
     return defined_room
+
+
+    
