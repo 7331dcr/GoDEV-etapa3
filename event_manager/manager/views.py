@@ -7,8 +7,8 @@ from .util import count_max_attendees, define_coffee_space, define_room_2, find_
 
 
 def index(request):
-
     return render(request, "manager/index.html")
+
 
 def cadastro(request):
     if len(Event_room.objects.all()) < 1:
@@ -54,6 +54,7 @@ def pre_cadastro_sala(request):
         return HttpResponseRedirect(reverse("cadastro_sala"))
 
     return render(request, "manager/pre_cadastro_sala.html")
+
 
 def cadastro_sala(request):
     forms_quantity = 0
@@ -103,6 +104,7 @@ def cadastro_sala(request):
         "number_list": number_list,
         "quantity": forms_quantity
     })
+
 
 def cadastro_cafe(request):
     spaces = Coffee_space.objects.all()
@@ -156,6 +158,7 @@ def consulta(request):
     
     return render(request, "manager/consulta.html")
 
+
 def consulta_sala(request):
     rooms = Event_room.objects.all()
     rooms_list = []
@@ -189,7 +192,6 @@ def consulta_sala(request):
     return render(request, "manager/consulta_sala.html", {
         "rooms": rooms_list
     })
-
 
 
 def consulta_cafe(request):
