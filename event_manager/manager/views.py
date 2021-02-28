@@ -7,7 +7,7 @@ from .util import count_max_attendees, define_coffee_space, define_room_etapa2, 
 
 
 def index(request):
-    
+
     return render(request, "manager/index.html")
 
 def cadastro(request):
@@ -38,6 +38,10 @@ def cadastro(request):
 
             new_entry = Attendee(name=name, last_name=last_name, event_room_1=event_room_1, event_room_2=event_room_2, coffee_space=assigned_space)
             new_entry.save()
+        else:
+            return render(request, "manager/cadastro.html", {
+                "message": f'Cadastro não efetuado. Capacidade máxima de participantes cadastrados foi atingida.'
+            })
 
         return render(request, "manager/cadastro.html", {
             "message": f'Participante "{name} {last_name}" foi cadastrado com sucesso.'
@@ -202,13 +206,13 @@ def consulta_cafe(request):
         if query.count() < 1:
             return render(request, "manager/consulta_sala.html", {
             "message": "Não há participantes cadastrados neste espaço.",
-            "room_name": name,
+            "space_name": name,
             "rooms": rooms_list
             })
 
         return render(request, "manager/consulta_cafe.html", {
             "attendees": query,
-            "room_name": name,
+            "space_name": name,
             "spaces": spaces_list
         })
     
