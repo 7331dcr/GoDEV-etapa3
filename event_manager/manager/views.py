@@ -142,13 +142,13 @@ def consulta(request):
     if request.method == "POST":
         name = request.POST['name']
         last_name = request.POST['last_name']
-        
-        if not name or not last_name:
-            return render(request, "manager/cadastro.html", {
-                "message": f'NOME ou SOBRENOME inválidos.'
-            })
 
         query = Attendee.objects.filter(name=name, last_name=last_name)
+
+        if not name or not last_name or len(query) < 1:
+            return render(request, "manager/consulta.html", {
+                "message": f'Participante não cadastrado ou dados inválidos.'
+            })
 
         return render(request, "manager/consulta.html", {
             "attendees": query
