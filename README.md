@@ -1,6 +1,6 @@
 # Gerenciador - Treinamento ProWay
 
-Projeto feito em Python (v. 3.8.6) utilizando Django (v. 3.1.5) como framework, com interface em HTML puro.
+Projeto feito em Python(v. 3.8.6), utilizando Django(v. 3.1.5) como framework e com interface em HTML puro.
 
 ## Instalação:
 
@@ -24,8 +24,17 @@ Permite consultar o nome do espaço para café e das salas de evento designadas 
 
 `/consulta_sala`
 
-Permite consultar a lista de participantes cadastrados na sala de evento especificada.
+Permite consultar a lista de participantes cadastrados na sala de evento especificada e visualizar sua lotação.
 
 `/consulta_cafe`
 
-Permite consultar a lista de participantes cadastrados no espaço para café especificado.
+Permite consultar a lista de participantes cadastrados no espaço para café especificado e visualizar sua lotação.
+
+## Observações e decisões:
+
+- Interface do desafio feita inteiramente em HTML com o intúito de facilitar e simplificar seu uso nos dispositivos/browsers utilizados para acessar o gerenciador.
+
+- Seguindo as exatas definições do desafio, a capacidade máxima dos espaços para café é requerimento obrigatório para o cadastro, porém, não é componente definitivo para o número máximo de participantes cadastrados. Assim, assume-se que o controle deve ser feito pela equipe organizacional.
+
+- A quantidade de espaços para café e de intervalos é predefinida no desafio, sem especificar o momento que acontecerão nem seu atrelamento às etapas do evento.
+Portanto, para este desafio, assumiu-se que os intervalos acontecerão simultaneamente nos dois locais.
