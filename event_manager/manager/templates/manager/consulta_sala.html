@@ -12,7 +12,6 @@
     <h3>Consultar participantes por sala de evento:</h3>
     <div id=consulta_sala>
         <form action="{% url 'consulta_sala' %}" method="post">
-            
             <select name=name>
                 {% for room in rooms %}
                 <option value="{{room.name}}">{{room.name}}</option>
@@ -23,13 +22,13 @@
     </div>  
     
     {% if message %}
-        <h2>SALA: {{room_name}}</h2>
+        <h2>SALA: "{{room_name}}"</h2>
         {{message}}
     {% endif %}
 
     {% if attendees_1 or attendees_2 %}
         <div id=consulta>
-            <h2>SALA: {{room_name}}</h2>
+            <h2>SALA: "{{room_name}}"</h2>
             {% if attendees_1 %}
                 <h3>Etapa 1 - ({{occupancy_1}}/{{capacity}})</h3>
                 <div id="etapa_1">

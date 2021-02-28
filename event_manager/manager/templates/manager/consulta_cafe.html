@@ -17,18 +17,17 @@
                 <option value="{{space.name}}">{{space.name}}</option>
                 {% endfor %}
             </select>
-
             <input type="submit" value="Consultar participantes">
         </form>
     </div>
    
     {% if message %}
-    <br><br>
+        <h2>ESPAÇO: "{{space_name}}"</h2>
         {{message}}
     {% endif %}
 
     {% if attendees %}
-        <h2>ESPAÇO: {{space_name}}</h2>
+        <h2>ESPAÇO: "{{space_name}}"</h2>
         <div id=consulta>
             <table>
                 <tr>
