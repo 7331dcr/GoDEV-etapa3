@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import Event_room, Coffee_space, Attendee
-from .util import count_max_attendees, define_coffee_space, define_room_etapa2, find_emptier_room, find_second_room
+from .util import count_max_attendees, define_coffee_space, define_room_2, find_emptier_room, find_second_room
 
 
 def index(request):
@@ -32,7 +32,7 @@ def cadastro(request):
            
             event_room_1 = find_emptier_room()
 
-            event_room_2 = define_room_etapa2()
+            event_room_2 = define_room_2()
 
             assigned_space = define_coffee_space(current_attendees)
 

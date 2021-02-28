@@ -1,8 +1,10 @@
+from django.db.models import Q
 from .models import Event_room, Coffee_space, Attendee
 
+
 def count_max_attendees():
-    query_smallest_room = Event_room.objects.all().order_by('capacity').first()
-    smallest_room_capacity = int(query_smallest_room.capacity)
+    smallest_room = Event_room.objects.all().order_by('capacity').first()
+    smallest_room_capacity = int(smallest_room.capacity)
     number_of_rooms = Event_room.objects.all().count()
     max_attendees = smallest_room_capacity * number_of_rooms + (number_of_rooms - 1)
     
@@ -39,16 +41,29 @@ def define_coffee_space(current_attendees):
     else:
         assigned_space = assigned_space.last()
 
-    return assinged_space
+    return assigned_space
 
 
-def define_room_etapa2():
+def define_room_2():
     current_attendees = Attendee.objects.all().count()
     if current_attendees % 2 != 0:
         emptier_room = find_emptier_room()
+        smallest_room = Event_room.objects.all().order_by('capacity').first()
+        room_capacity = int(smallest_room.capacity) + 1
+        if int(emptier_room.capacity) == int(smallest_room.capacity):
+            room_capacity = int(smallest_room.capacity)
+        occupancy = emptier_room.room2_assigneds.count()
+        if occupancy < room_capacity:
+            defined_room = emptier_room
+        else:
+            available_rooms = Event_room.objects.exclude(name=emptier_room.name)
+            defined_room = find_second_room(available_rooms)
+            if not defined_room.room2_assigneds.count() < int(smallest_room.capacity):
+                available_rooms = Event_room.objects.exclude(Q(name=emptier_room.name) | Q(name=defined_room.name))
+                defined_room = find_second_room(available_rooms)
     else:
         emptier_room = find_emptier_room()
         available_rooms = Event_room.objects.exclude(name=emptier_room.name)
-        emptier_room = find_second_room(available_rooms)
+        defined_room = find_second_room(available_rooms)
 
-    return emptier_room
+    return defined_room
