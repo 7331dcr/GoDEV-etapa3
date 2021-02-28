@@ -207,13 +207,18 @@ def consulta_cafe(request):
             return render(request, "manager/consulta_sala.html", {
             "message": "Não há participantes cadastrados neste espaço.",
             "space_name": name,
-            "rooms": rooms_list
+            "spaces": spaces_list
             })
+        
+        capacity = query[0].coffee_space.capacity
+        occupancy = query.count()
 
         return render(request, "manager/consulta_cafe.html", {
             "attendees": query,
             "space_name": name,
-            "spaces": spaces_list
+            "spaces": spaces_list,
+            "capacity": capacity,
+            "occupancy": occupancy
         })
     
     return render(request, "manager/consulta_cafe.html", {
