@@ -9,6 +9,14 @@
     <a href="{% url 'consulta_cafe' %}">CONSULTAR POR ESPAÇO</a>
     <hr>
 
+    {% if message %}
+        <div class="alert-message">
+            <br>
+            {{message}}
+            <br><br>
+        </div>
+    {% endif %}
+
     <h3>Consulta de participante:</h3>
     <div id=consulta>
         <form action="{% url 'consulta' %}" method="post">
@@ -22,7 +30,7 @@
         
     {% if attendees %}
     <br><br>
-    <div id=consulta>
+    <div class=consulta>
         <table>
             <tr>
                 <th>Nº</th>
