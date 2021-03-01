@@ -37,7 +37,8 @@
                 <th>NOME</th>
                 <th>SOBRENOME</th>
                 <th>ESPAÇO DO CAFÉ</th>
-                <th>SALA DE EVENTO</th>
+                <th>SALA - ETAPA 1</th>
+                <th>SALA - ETAPA 2</th>
             </tr>
         {% for attendee in attendees %}
             <tr>
@@ -45,7 +46,8 @@
                 <td>{{attendee.name}}</td>
                 <td>{{attendee.last_name}}</td>
                 <td>{{attendee.coffee_space.name}}</td>
-                <td>{{attendee.event_room.name}}</td>
+                <td>{{attendee.event_room_1.name}}</td>
+                <td>{{attendee.event_room_2.name}}</td>
             </tr>
         {% endfor %}
         </table>
