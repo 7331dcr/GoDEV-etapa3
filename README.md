@@ -4,7 +4,7 @@ Projeto feito em Python(v. 3.8.6), utilizando Django(v. 3.1.5) como framework e 
 
 ## Instalação:
 
-##### Setup do gerenciador:
+#### Setup do gerenciador:
 Dentro do folder `/event_manager/manager`, no terminal de sua escolha:
 
 - executar `python manage.py makemigrations` para que o Django gere os arquivos necessários para do database;
@@ -14,7 +14,7 @@ Dentro do folder `/event_manager/manager`, no terminal de sua escolha:
 Por padrão, o endereço do servidor será `http://127.0.0.1:8000/`.
 
 
-##### Setup da ferramenta administrativa `/admin`: (opcional)
+#### Setup da ferramenta administrativa `/admin`: (opcional)
 
 Para utilizar o recurso `/admin`, é necessário criar uma conta administrativa. 
 
