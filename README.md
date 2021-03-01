@@ -4,9 +4,21 @@ Projeto feito em Python(v. 3.8.6), utilizando Django(v. 3.1.5) como framework e 
 
 ## Instalação:
 
-Dentro do folder `/event_manager/manager`, iniciar o servidor executando `python manage.py runserver` no terminal de sua escolha.
+##### Setup do gerenciador:
+Dentro do folder `/event_manager/manager`, no terminal de sua escolha:
+
+- executar `python manage.py makemigrations` para que o Django gere os arquivos necessários para do database;
+- executar `python manage.py migrate` para que os arquivos sejam executados e o database seja criado;
+- executar `python manage.py runserver` para que o servidor seja iniciado.
 
 Por padrão, o endereço do servidor será `http://127.0.0.1:8000/`.
+
+
+##### Setup da ferramenta administrativa `/admin`: (opcional)
+
+Para utilizar o recurso `/admin`, é necessário criar uma conta administrativa. 
+
+No folder `/event_manager/manager`, execute `python manage.py createsuperuser`.
 
 ## Recursos:
 
@@ -29,6 +41,10 @@ Permite consultar a lista de participantes cadastrados na sala de evento especif
 `/consulta_cafe`
 
 Permite consultar a lista de participantes cadastrados no espaço para café especificado e visualizar sua lotação.
+
+`/admin`
+
+Interface automática fornecida pelo Django. Permite gerenciar de maneira fácil o database.
 
 ## Observações e decisões:
 
